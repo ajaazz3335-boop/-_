@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Мягко — прототип</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');document.documentElement.dataset.theme=localStorage.getItem('myagko:theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')</script>
+<style>
+:root{--bg:#F6F6F9;--s:#fff;--s2:#EFEFF4;--tx:#231F3A;--mu:#686482;--pr:var(--acc,#5B4FD6);--onp:#fff;--bd:#E2E2EA;--dg:#C8453F;--ok:#1F7A55;--sp:linear(0, 0.0401, 0.1313, 0.2431, 0.3577, 0.4656, 0.562, 0.6452, 0.7154, 0.7736, 0.821, 0.8594, 0.89, 0.9144, 0.9336, 0.9487, 0.9605, 0.9696, 0.9767, 0.9822, 0.9864, 0.9896, 0.9921, 0.994, 0.9955, 1);--d:.42s;--ez:cubic-bezier(.2,.8,.2,1);color-scheme:light}
+[data-theme=dark]{--bg:#15122A;--s:#211D3B;--s2:#2C2750;--tx:#ECE9F8;--mu:#A29DC0;--pr:var(--accd,#9C93FF);--onp:#15122A;--bd:#3A3562;--dg:#FF8A80;--ok:#5FD3A5;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 Onest,system-ui,sans-serif;-webkit-text-size-adjust:100%;transition:background-color .4s}
+.wrap{max-width:520px;margin:0 auto;padding:0 16px 150px}main,#done{display:flex;flex-direction:column;gap:12px}
+.top,.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.top{padding:14px 0 0}.logo{font-weight:700;letter-spacing:-.02em}
+.muted{color:var(--mu);font-size:13px}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}h2{font-size:18px;margin:0;letter-spacing:-.01em}
+.display{font-size:clamp(2.6rem,11vw,3.6rem);line-height:1;letter-spacing:-.035em;font-weight:700;margin:22px 0 8px}.lead{font-size:15px;margin:0 0 18px}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(35,31,58,.05),0 10px 28px -6px rgba(35,31,58,.08)}
+.btn,.opt,.seg button,.chip{font:inherit;cursor:pointer;color:var(--tx);border:1px solid var(--bd);transition:transform .35s var(--sp),background-color .25s,color .25s,border-color .25s,opacity .2s}
+.btn:active,.opt:active,.seg button:active,.chip:active{transform:scale(.97);transition:transform 90ms ease-out}
+.btn{border-radius:16px;padding:14px 20px;min-height:52px;font-weight:600;background:var(--pr);color:var(--onp);border-color:var(--pr);width:100%}.btn.sec{background:var(--s);color:var(--tx);border-color:var(--bd);width:auto}
+.btn.sm{min-height:40px;padding:8px 14px}.btn.step{width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;font-size:20px}.btn:disabled{opacity:.5;cursor:not-allowed}
+.chip{border-radius:20px;padding:8px 12px;background:var(--s2)}.mag{display:block}.dock .mag{width:auto}
+.seg{position:relative;display:flex;flex-wrap:wrap;gap:8px}.seg button{position:relative;z-index:1;border-radius:20px;padding:10px 16px;min-height:44px;font-weight:500;background:var(--s2)}
+.seg [aria-pressed=true]{background:transparent;border-color:transparent;color:var(--onp);font-weight:600}
+.ind{position:absolute;left:0;top:0;z-index:0;border-radius:20px;background:var(--pr);box-shadow:0 6px 16px -6px var(--pr)}.seg.rdy .ind{transition:transform var(--d) var(--sp),width var(--d) var(--sp),height var(--d) var(--sp)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}.opt{border-radius:16px;padding:12px;background:var(--s);text-align:center;min-height:56px}.opt small{display:block;font-size:12px;opacity:.8}
+.opt[aria-pressed=true]{background:var(--pr);border-color:var(--pr);color:var(--onp);font-weight:600}
+.price{font-size:44px;line-height:48px;font-weight:700;letter-spacing:-.02em;color:var(--pr);font-variant-numeric:tabular-nums}.price.sm{font-size:30px;line-height:34px}
+.bump{animation:bump .5s var(--ez);display:inline-block;transform-origin:left}@keyframes bump{35%{transform:scale(1.05)}}
+.f{display:flex;flex-direction:column;gap:6px}.f label{font-size:13px;font-weight:500;color:var(--mu)}
+input:not([type=checkbox]),textarea{font:inherit;color:var(--tx);background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:13px 14px;width:100%;min-height:48px;transition:border-color .2s,box-shadow .2s}
+input:focus-visible,textarea:focus-visible{outline:0;border-color:var(--pr);box-shadow:0 0 0 4px color-mix(in srgb,var(--pr) 22%,transparent)}[aria-invalid=true]{border:2px solid var(--dg)!important}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--pr);flex:none}.err{color:var(--dg);font-size:12px;font-weight:500}.err:empty{display:none}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--pr) 45%,transparent);outline-offset:2px}
+.collapse{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows var(--d) var(--sp),opacity .3s}.collapse.open{grid-template-rows:1fr;opacity:1}.ci{overflow:hidden;min-height:0}.cr{padding:8px 0}
+.toast{transition:opacity .3s}.pulse{animation:ring .7s var(--ez)}@keyframes ring{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--pr) 40%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
+.js .fade:not(.in){opacity:0;transform:translateY(14px)}.fade{transition:opacity .6s var(--ez),transform .7s var(--sp);transition-delay:var(--dl,0ms)}
+.bt{display:inline-block;animation:bl .75s var(--ez) both;animation-delay:calc(var(--i)*55ms + 120ms)}@keyframes bl{from{opacity:0;filter:blur(12px);transform:translateY(.35em)}}
+.stage{position:relative;border-radius:28px;background:var(--s2);border:1px solid var(--bd);overflow:hidden}.stage svg{display:block;width:100%;height:auto;animation:sin .5s var(--ez)}@keyframes sin{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+.stage small{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:12px;color:var(--mu)}
+.eyes{transform-box:fill-box;transform-origin:center;animation:blink 5.4s infinite}@keyframes blink{0%,94%,100%{transform:scaleY(1)}96.5%{transform:scaleY(.08)}}
+.hop{transform-box:fill-box;transform-origin:50% 100%}.ca .hop{animation:hopa .6s var(--ez)}.cb .hop{animation:hopb .6s var(--ez)}
+@keyframes hopa{30%{transform:translateY(-12px)}60%{transform:scale(1.02,.97)}}@keyframes hopb{30%{transform:translateY(-12px)}60%{transform:scale(1.02,.97)}}
+.ca .wave{animation:wva 1.3s ease-in-out}.cb .wave{animation:wvb 1.3s ease-in-out}
+@keyframes wva{20%,80%{transform:rotate(-150deg)}35%,65%{transform:rotate(-125deg)}50%{transform:rotate(-160deg)}}@keyframes wvb{20%,80%{transform:rotate(-150deg)}35%,65%{transform:rotate(-125deg)}50%{transform:rotate(-160deg)}}
+.dock{position:fixed;inset:auto 0 0 0;z-index:20;padding:32px 16px calc(12px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .5s var(--sp);pointer-events:none}.dock[data-on=true]{transform:none;pointer-events:auto}
+.dock::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,color-mix(in srgb,var(--bg) 90%,transparent) 25%,transparent)}
+.gb{position:absolute;inset:0;pointer-events:none}.gb i{position:absolute;inset:0}
+.di{position:relative;max-width:520px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 10px 10px 18px;border-radius:22px;background:color-mix(in srgb,var(--s) 84%,transparent);border:1px solid var(--bd);box-shadow:0 12px 32px -10px rgba(35,31,58,.3);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%)}
+.dp{font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
+.spin{display:inline-block;width:16px;height:16px;margin-right:8px;vertical-align:-3px;border-radius:50%;border:2.5px solid color-mix(in srgb,var(--onp) 35%,transparent);border-top-color:var(--onp);animation:sp .7s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.check{width:72px;height:72px;margin:20px 0 0;overflow:visible}.check circle{fill:none;stroke:var(--ok);stroke-width:3;stroke-dasharray:150;stroke-dashoffset:150;animation:dr .7s var(--ez) .1s forwards}
+.check path{fill:none;stroke:var(--ok);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:dr .4s var(--ez) .65s forwards}
+.check .halo{stroke-dasharray:none;stroke-dashoffset:0;stroke-width:2;opacity:0;transform-origin:26px 26px;animation:ha .9s var(--ez) .9s}@keyframes dr{to{stroke-dashoffset:0}}@keyframes ha{from{opacity:.5}to{opacity:0;transform:scale(1.6)}}
+.stage{aspect-ratio:6/5}#svgBox{position:absolute;inset:0;display:flex;align-items:center}.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:grab}.stage canvas:active{cursor:grabbing}.stage small{pointer-events:none}#rst3d{position:absolute;top:12px;right:12px;min-height:34px;padding:6px 12px;font-size:13px}
+footer{margin-top:28px;font-size:13px;color:var(--mu)}a{color:var(--pr)}
+@media(prefers-reduced-transparency:reduce){.gb{display:none}.di{background:var(--s);backdrop-filter:none;-webkit-backdrop-filter:none}}
+@media(prefers-reduced-motion:reduce){*,::before,::after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0ms!important;transition-duration:.01ms!important;transition-delay:0ms!important;scroll-behavior:auto!important}.js .fade:not(.in){opacity:1;transform:none}}
+</style></head><body><div class="wrap">
+<div class="top"><b class="logo">Мягко</b><button class="chip" id="theme" aria-label="Сменить тему">◐ Тема</button></div>
+<h1 class="display" id="brand" aria-label="Мягко"></h1>
+<p class="muted lead fade">Выездная химчистка мягкой мебели. Выберите мебель, посмотрите примерную стоимость и отправьте заявку. Мастер свяжется, согласует цену и время.</p>
+<main id="order">
+<div class="stage fade" id="stage"><div id="svgBox" aria-hidden="true"></div><canvas id="c3d" hidden aria-label="3D-модель мебели: вращайте, чтобы рассмотреть со всех сторон"></canvas><small id="sh">Здесь появится 3D-модель</small><button class="chip" id="rst3d" hidden>Сбросить ракурс</button></div>
+<section class="card fade" aria-label="Выбор мебели">
+<div class="seg" id="seg" role="group" aria-label="Категория"><span class="ind" id="ind"></span></div>
+<div class="opts" id="opts"></div>
+<div class="row"><span>Количество</span><span class="row"><button class="btn sec step" id="qm" aria-label="Меньше">−</button><b id="qv">1</b><button class="btn sec step" id="qp" aria-label="Больше">+</button></span></div>
+<label class="row"><span id="hl">Сильные загрязнения +30%</span><input type="checkbox" id="heavy"></label>
+<label class="row" id="sideRow" hidden><span id="sl">Чистка второй стороны +70%</span><input type="checkbox" id="side"></label>
+<div><span class="muted">Примерная стоимость позиции</span><div class="price" id="pv"></div><span class="muted" id="mn">Минимальный заказ 2 500 ₽. Итог согласует мастер.</span></div>
+<div class="mag"><button class="btn" id="add">Добавить в заявку</button></div></section>
+<section class="card fade" id="cartCard"><h2>Ваша заявка</h2><p class="muted" id="empty">В заявке пока пусто. Выберите мебель выше.</p><div id="rows"></div>
+<div class="row toast" id="undo" hidden><span class="muted">Позиция удалена</span><button class="btn sec sm" id="undoBtn">Отменить</button></div>
+<div id="sum" hidden><div class="row"><span class="muted" id="cl">Чистка</span><b id="cv"></b></div><div class="row" id="townRow" hidden><span class="muted">Выезд за город</span><b id="tv"></b></div><div class="row"><span>Предварительно</span><span class="price sm" id="tt"></span></div></div></section>
+<form class="card fade" id="form" novalidate aria-label="Оформление заявки"><h2>Контакты и адрес</h2>
+<div class="f"><label for="name">Имя</label><input id="name" autocomplete="name"><span class="err" id="e-name" role="alert"></span></div>
+<div class="f"><label for="phone">Телефон</label><input id="phone" type="tel" autocomplete="tel"><span class="err" id="e-phone" role="alert"></span></div>
+<div class="f"><label for="address">Адрес</label><input id="address" autocomplete="street-address"><span class="err" id="e-address" role="alert"></span></div>
+<label class="row"><span id="tl">Выезд за город +800 ₽</span><input type="checkbox" id="town"></label>
+<span class="muted">Желаемое время (необязательно): мастер подтвердит запись после разговора.</span>
+<div class="row" style="align-items:flex-start"><div class="f" style="flex:1"><label for="date">Дата</label><input id="date" type="date"></div><div class="f" style="flex:1"><label for="time">Время, например 12:00-14:00</label><input id="time"><span class="err" id="e-time" role="alert"></span></div></div>
+<div class="f"><label for="comment">Комментарий</label><textarea id="comment" rows="3"></textarea></div>
+<label class="row" style="justify-content:flex-start"><input type="checkbox" id="consent"><span>Согласен на обработку персональных данных</span></label><span class="err" id="e-consent" role="alert"></span>
+<div class="mag"><button class="btn" type="submit" id="send">Отправить заявку</button></div></form></main>
+<section id="done" hidden><svg class="check" viewBox="0 0 52 52" aria-hidden="true"><circle class="halo" cx="26" cy="26" r="24"/><circle cx="26" cy="26" r="24"/><path d="M15 27l8 8 14-16"/></svg>
+<h2 style="font-size:26px">Заявка принята</h2><p class="muted">Прототип: заявка никуда не отправляется. В приложении это будет ваша личная ссылка, изменения мастера появятся по ней.</p>
+<div class="card" id="doneCard"></div><button class="btn sec" id="copy">Скопировать ссылку</button><button class="btn" id="again">Оформить ещё</button></section>
+<footer><p id="fb">Мягко · Владивосток · <a href="tel:+79000000000">+7 (900) 000-00-00</a></p><p>Контакты демонстрационные, не настоящие.</p></footer></div>
+<div class="dock" id="dock" data-on="false" inert role="region" aria-label="Итог заявки"><div class="gb" id="gb" aria-hidden="true"></div><div class="di"><div><span class="muted">Предварительно</span><div class="dp" id="dt"></div></div><div class="mag"><button class="btn" id="go">К оформлению</button></div></div></div>
+<script>
+//<pure>
+const V={'sofa-2':['sofa','Диван, 2 места',2400],'sofa-3':['sofa','Диван, 3 места',3200],'sofa-corner':['sofa','Диван угловой',4800],'armchair-classic':['armchair','Кресло',1200],'armchair-recliner':['armchair','Кресло-реклайнер',1700],'mattress-single':['mattress','Матрас односпальный',1500],'mattress-double':['mattress','Матрас двуспальный',2300],'chair-seat':['chair','Стул, сиденье',400],'chair-back':['chair','Стул, сиденье и спинка',600]};
+const S={min:2500,heavy:30,side:70,town:800,max:20};
+const lineAmt=(b,q,h,s)=>Math.floor((b*q*(100+(s?S.side:0))*(100+(h?S.heavy:0))+5000)/10000);
+function price(lines,town){let known=0;const amts=lines.map(l=>{const a=lineAmt(V[l.v][2],l.q,l.h,l.s);known+=a;return a});const has=lines.length>0,clean=has?Math.max(known,S.min):0,fee=town&&has?S.town:0;return{amts,known,clean,fee,total:clean+fee,minApplied:has&&known<S.min}}
+const phone=s=>{const d=s.replace(/\D/g,'');const n=d.length===11&&(d[0]==='7'||d[0]==='8')?d.slice(1):d.length===10?d:'';return/^[3-9]\d{9}$/.test(n)?'+7'+n:null};
+function errs(f){const e={};if(f.name.trim().length<2)e.name='Укажите имя (от 2 символов)';if(!phone(f.phone))e.phone='Введите номер полностью';if(f.address.trim().length<5)e.address='Укажите адрес (от 5 символов)';
+if(f.time.trim()&&!/^\d{2}:\d{2}(-\d{2}:\d{2})?$/.test(f.time.trim()))e.time='Время вида 12:00 или 12:00-14:00';else if(f.time.trim()&&!f.date)e.time='Для времени укажите дату';if(!f.consent)e.consent='Нужно согласие на обработку данных';return e}
+//</pure>
+const ST=(()=>{try{return JSON.parse(localStorage.getItem('myagko:settings:v1')||'null')}catch{return null}})();
+if(ST){for(const k in ST.prices||{})if(V[k])V[k][2]=+ST.prices[k];Object.assign(S,ST.rules||{})}
+const $=s=>document.querySelector(s),rub=n=>n.toLocaleString('ru-RU')+' ₽',LS='myagko:proto:v1',reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CATS={sofa:'Диван',armchair:'Кресло',mattress:'Матрас',chair:'Стул'},key=l=>[l.v,+l.h,+l.s].join('|'),lbl=l=>V[l.v][1]+(l.h?' · сильные загрязнения':'')+(l.s?' · обе стороны':'');
+let cat='sofa',vr='sofa-3',cart=[],cheer=0,undoItem=null,formSeen=false,last=0;const rows=new Map();
+// сцена: ожившая заглушка 3D
+const INK='#231F3A',GL='#F7F0E3',WD='#8B5A3A';
+const face=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><g class="eyes"><ellipse cx="-26" rx="8" ry="11" fill="${INK}"/><ellipse cx="26" rx="8" ry="11" fill="${INK}"/><circle cx="-23" cy="-4" r="2.6" fill="#fff"/><circle cx="29" cy="-4" r="2.6" fill="#fff"/></g><ellipse cx="-48" cy="20" rx="10" ry="5.5" fill="#E8A09E" opacity=".5"/><ellipse cx="48" cy="20" rx="10" ry="5.5" fill="#E8A09E" opacity=".5"/><path d="M-16 20Q0 34 16 20" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round"/></g>`;
+const arm=(x,y,sd,c,w)=>`<g${w?' class="wave"':''} style="transform-origin:${x}px ${y}px"><rect x="${x-8}" y="${y-6}" width="16" height="58" rx="8" fill="${c}"/><circle cx="${x}" cy="${y+58}" r="14" fill="${GL}"/><circle cx="${x+sd*11}" cy="${y+52}" r="6" fill="${GL}"/></g>`;
+const shadow=(rx)=>`<ellipse cx="180" cy="254" rx="${rx}" ry="9" fill="${INK}" opacity=".12"/>`;
+const sofa=(w,[b,a,s])=>{const L=180-w/2,R=180+w/2;return shadow(w/2+14)+`<rect x="${L+22}" y="226" width="12" height="22" rx="4" fill="${WD}"/><rect x="${R-34}" y="226" width="12" height="22" rx="4" fill="${WD}"/><rect x="${L+24}" y="62" width="${w-48}" height="108" rx="34" fill="${b}"/><rect x="${L}" y="108" width="52" height="116" rx="26" fill="${a}"/><rect x="${R-52}" y="108" width="52" height="116" rx="26" fill="${a}"/><rect x="${L+20}" y="142" width="${w-40}" height="78" rx="28" fill="${s}"/>`+face(180,98)+arm(L-4,168,-1,a)+arm(R+4,168,1,a,1)};
+const mattress=()=>{let q='';for(let i=-3;i<7;i++){const x=108+28*i;q+=`<line x1="${x}" y1="146" x2="${x+78}" y2="224"/><line x1="${x+78}" y1="146" x2="${x}" y2="224"/>`}
+return shadow(100)+`<defs><clipPath id="qc"><rect x="108" y="146" width="144" height="78" rx="14"/></clipPath></defs><ellipse cx="146" cy="244" rx="20" ry="11" fill="#E5876E"/><ellipse cx="214" cy="244" rx="20" ry="11" fill="#E5876E"/><rect x="96" y="22" width="168" height="214" rx="30" fill="#F1E6D3"/><rect x="108" y="34" width="144" height="190" rx="22" fill="#8FC7B0" stroke="#E5876E" stroke-width="3"/><g clip-path="url(#qc)" stroke="#6FAE97" stroke-width="2" opacity=".75">${q}</g>`+[119,147,175,203,231].map(x=>`<circle cx="${x}" cy="185" r="3.5" fill="#6FAE97"/>`).join('')+face(180,88,.9)+arm(90,118,-1,'#8FC7B0')+arm(270,118,1,'#8FC7B0',1)};
+const chair=()=>shadow(90)+`<rect x="116" y="178" width="10" height="66" rx="4" fill="${WD}"/><rect x="234" y="178" width="10" height="66" rx="4" fill="${WD}"/><rect x="118" y="52" width="124" height="108" rx="28" fill="#E9B949"/><rect x="104" y="140" width="152" height="42" rx="16" fill="#F2CC72"/>`+face(180,92,.85)+arm(92,150,-1,'#E9B949')+arm(268,150,1,'#E9B949',1);
+const KIND={sofa:()=>sofa(236,['#4AA0A0','#3B8D90','#55B5B0']),armchair:()=>sofa(150,['#F0A58B','#E5876E','#F7BBA3']),mattress,chair};
+const stage=()=>{const S3=window.S3,m=S3&&S3.has(vr);if(m&&S3.show(vr))return;$('#c3d').hidden=true;$('#rst3d').hidden=true;$('#svgBox').hidden=false;$('#svgBox').innerHTML=`<svg viewBox="0 0 360 280"><g class="hop">${KIND[cat]()}</g></svg>`;$('#sh').textContent=m?'Загружаем 3D-модель…':'Здесь появится 3D-модель'};
+// плавное число (стартует с текущего значения, прерывается)
+function count(el,to){el.style.minWidth=rub(to).length+'ch';if(reduce||el._v===undefined){el._v=to;el.textContent=rub(to);return}if(el._v===to)return;cancelAnimationFrame(el._r);const a=el._v,t0=performance.now();
+const tick=t=>{const p=Math.min(1,(t-t0)/650);el._v=Math.round(a+(to-a)*(1-Math.pow(1-p,4)));el.textContent=rub(el._v);if(p<1)el._r=requestAnimationFrame(tick)};el._r=requestAnimationFrame(tick);el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump')}
+const cur=()=>({v:vr,q:+$('#qv').textContent,h:$('#heavy').checked,s:vr==='mattress-double'&&$('#side').checked});
+function opts(){$('#opts').innerHTML=Object.keys(V).filter(k=>V[k][0]===cat).map(k=>`<button class="opt" data-v="${k}" aria-pressed="${k===vr}">${V[k][1]}<small>${rub(V[k][2])}</small></button>`).join('');$('#sideRow').hidden=vr!=='mattress-double'}
+function prev(){const l=cur();count($('#pv'),price([l],false).amts[0])}
+function ind(){const b=$('#seg [aria-pressed=true]'),i=$('#ind');if(b){i.style.transform=`translate(${b.offsetLeft}px,${b.offsetTop}px)`;i.style.width=b.offsetWidth+'px';i.style.height=b.offsetHeight+'px'}}
+function pick(c){cat=c;vr=Object.keys(V).find(k=>V[k][0]===c);$('#qv').textContent=1;$('#heavy').checked=$('#side').checked=false;document.querySelectorAll('#seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===c));opts();stage();prev();ind()}
+// корзина
+function mkRow(l){const el=document.createElement('div');el.className='collapse';el.dataset.k=key(l);el.innerHTML=`<div class="ci"><div class="row cr"><div><div>${lbl(l)}</div><span class="muted" data-a></span></div><span class="row"><button class="btn sec sm" data-d="-1" aria-label="Меньше">−</button><b data-q></b><button class="btn sec sm" data-d="1" aria-label="Больше">+</button><button class="btn sec sm" data-x>Удалить</button></span></div></div>`;return el}
+function sync(){const town=$('#town').checked,p=price(cart,town),ks=cart.map(key);for(const[k,el]of rows)if(!ks.includes(k)){el.classList.remove('open');setTimeout(()=>el.remove(),350);rows.delete(k)}
+cart.forEach((l,i)=>{const k=key(l);let el=rows.get(k);if(!el){el=mkRow(l);rows.set(k,el);$('#rows').appendChild(el);requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('open')))}el.querySelector('[data-q]').textContent=l.q;el.querySelector('[data-a]').textContent=rub(p.amts[i])});
+$('#empty').hidden=cart.length>0;$('#sum').hidden=!cart.length;$('#townRow').hidden=!(town&&cart.length);$('#cl').textContent='Чистка'+(p.minApplied?' (минимальный заказ)':'');
+if(cart.length){count($('#cv'),p.clean);$('#tv').textContent='+'+rub(p.fee);count($('#tt'),p.total);last=p.total}count($('#dt'),cart.length?p.total:last);dock()}
+function dock(){const on=cart.length>0&&!formSeen&&!$('#order').hidden;$('#dock').dataset.on=on;$('#dock').inert=!on}
+const read=()=>({name:$('#name').value,phone:$('#phone').value,address:$('#address').value,date:$('#date').value,time:$('#time').value,comment:$('#comment').value,consent:$('#consent').checked,town:$('#town').checked});
+const save=()=>localStorage.setItem(LS,JSON.stringify({cart,f:read()}));
+function showErr(e){for(const k of['name','phone','address','time','consent']){$('#e-'+k).textContent=e[k]||'';const i=$('#'+k);if(i)i.setAttribute('aria-invalid',!!e[k])}}
+// связь с кабинетом
+const LSO='myagko:orders:v1';let curToken=null;
+function saveOrder(f,p,t){const os=JSON.parse(localStorage.getItem(LSO)||'[]');os.unshift({id:'A-'+Date.now().toString(36).slice(-5).toUpperCase(),token:t,status:'new',name:f.name.trim(),phone:phone(f.phone),address:f.address.trim(),town:f.town,wishDate:f.date,wishTime:f.time.trim(),comment:f.comment.trim(),lines:cart.map(l=>({...l})),snap:{prices:Object.fromEntries(Object.entries(V).map(([k,a])=>[k,a[2]])),S:{...S}},calc:{known:p.known,clean:p.clean,fee:p.fee,total:p.total,minApplied:p.minApplied},finalPrice:null,agreedAt:null,note:'',photos:[],seen:false,created:Date.now(),history:[{t:Date.now(),x:'Заявка создана клиентом'}]});localStorage.setItem(LSO,JSON.stringify(os))}
+function refreshDone(){if(!curToken||$('#done').hidden)return;let os=[];try{os=JSON.parse(localStorage.getItem(LSO)||'[]')}catch{}const o=os.find(x=>x.token===curToken);if(!o)return;const L={new:'Новая',agreed:'Согласована',done:'Завершена',cancelled:'Отменена'};
+$('#st').textContent=L[o.status];$('#pl').textContent=o.finalPrice?'Итоговая цена':'Предварительно';count($('#pp'),o.finalPrice||o.calc.total);$('#tm').textContent=o.agreedAt?new Date(o.agreedAt).toLocaleString('ru-RU',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}):'Согласуется по телефону'}
+addEventListener('storage',refreshDone);setInterval(refreshDone,1500);
+// события
+$('#seg').insertAdjacentHTML('beforeend',Object.entries(CATS).map(([k,t])=>`<button type="button" data-c="${k}" aria-pressed="${k===cat}">${t}</button>`).join(''));
+$('#seg').onclick=e=>{const b=e.target.closest('button');if(b)pick(b.dataset.c)};
+$('#opts').onclick=e=>{const b=e.target.closest('.opt');if(b){vr=b.dataset.v;$('#side').checked=false;opts();prev();stage()}};
+$('#qm').onclick=()=>{$('#qv').textContent=Math.max(1,+$('#qv').textContent-1);prev()};$('#qp').onclick=()=>{$('#qv').textContent=Math.min(S.max,+$('#qv').textContent+1);prev()};
+$('#heavy').onchange=$('#side').onchange=prev;
+$('#add').onclick=()=>{const l=cur(),k=key(l),ex=cart.find(x=>key(x)===k);if(ex)ex.q=Math.min(S.max,ex.q+l.q);else cart.push(l);undoItem=null;$('#undo').hidden=true;sync();save();cheer++;window.S3&&window.S3.cheer();const st=$('#stage');st.classList.remove('ca','cb');void st.offsetWidth;st.classList.add(cheer%2?'ca':'cb');const c=$('#cartCard');c.classList.remove('pulse');void c.offsetWidth;c.classList.add('pulse')};
+$('#rows').onclick=e=>{const el=e.target.closest('.collapse');if(!el)return;const i=cart.findIndex(l=>key(l)===el.dataset.k),d=e.target.closest('[data-d]'),x=e.target.closest('[data-x]');
+if(d){cart[i].q=Math.max(1,Math.min(S.max,cart[i].q+ +d.dataset.d));sync();save()}if(x){el.classList.remove('open');setTimeout(()=>{undoItem={l:cart[i],i};cart.splice(i,1);sync();save();$('#undo').hidden=false},reduce?0:320)}};
+$('#undoBtn').onclick=()=>{if(undoItem){cart.splice(undoItem.i,0,undoItem.l);undoItem=null;$('#undo').hidden=true;sync();save()}};
+$('#town').onchange=()=>{sync();save()};document.querySelectorAll('#form input,#form textarea').forEach(i=>i.addEventListener('input',()=>{save();const m=$('#e-'+i.id);if(m&&m.textContent){const e=errs(read());m.textContent=e[i.id]||'';i.setAttribute('aria-invalid',!!e[i.id])}}));
+$('#go').onclick=()=>$('#form').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+$('#form').onsubmit=async e=>{e.preventDefault();const f=read(),er=errs(f);showErr(er);if(!cart.length)return;if(Object.keys(er).length)return $('#form [aria-invalid=true]')?.focus();
+const b=$('#send');b.disabled=true;b.innerHTML='<span class="spin"></span>Отправляем…';await new Promise(r=>setTimeout(r,900));
+const p=price(cart,f.town),t=btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(18)))).replace(/\+/g,'-').replace(/\//g,'_');
+saveOrder(f,p,t);curToken=t;$('#doneCard').innerHTML=cart.map((l,i)=>`<div class="row"><span>${lbl(l)} · ${l.q}</span><b>${rub(p.amts[i])}</b></div>`).join('')+(p.fee?`<div class="row"><span class="muted">Выезд за город</span><b>+${rub(p.fee)}</b></div>`:'')+`<div class="row"><span class="muted">Статус</span><span class="chip" id="st">Новая</span></div><div class="row"><span id="pl">Предварительно</span><span class="price sm" id="pp">${rub(p.total)}</span></div><div class="row"><span class="muted">Время визита</span><span id="tm">Согласуется по телефону</span></div><span class="muted" id="lk">myagko.example/o/${t}</span>`;
+cart=[];localStorage.removeItem(LS);sync();$('#order').hidden=true;$('#done').hidden=false;b.disabled=false;b.textContent='Отправить заявку';scrollTo({top:0});dock()};
+$('#copy').onclick=async e=>{await navigator.clipboard.writeText($('#lk').textContent);e.target.textContent='Скопировано';setTimeout(()=>e.target.textContent='Скопировать ссылку',2000)};
+$('#again').onclick=()=>{$('#done').hidden=true;$('#order').hidden=false;scrollTo({top:0})};
+$('#theme').onclick=()=>{const d=document.documentElement,n=d.dataset.theme==='dark'?'light':'dark';d.dataset.theme=n;localStorage.setItem('myagko:theme',n)};
+// настройки компании и тарифов из кабинета
+const C=(ST&&ST.company)||{},BRAND=C.name||'Мягко',RT=document.documentElement;
+document.title=BRAND+' — прототип';document.querySelector('.logo').textContent=BRAND;$('#brand').setAttribute('aria-label',BRAND);
+if(C.accent){RT.style.setProperty('--acc',C.accent);RT.style.setProperty('--accd',`color-mix(in srgb,${C.accent} 62%,#fff)`)}
+$('#fb').innerHTML=`${BRAND} · ${C.city||'Владивосток'} · <a href="tel:${(C.phone||'+79000000000').replace(/[^+\d]/g,'')}">${C.phone||'+7 (900) 000-00-00'}</a>`;
+$('#hl').textContent=`Сильные загрязнения +${S.heavy}%`;$('#sl').textContent=`Чистка второй стороны +${S.side}%`;$('#mn').textContent=`Минимальный заказ ${rub(S.min)}. Итог согласует мастер.`;$('#tl').textContent=`Выезд за город +${rub(S.town)}`;
+// появление, нижняя панель, притяжение кнопок
+$('#brand').innerHTML=[...BRAND].map((c,i)=>`<span class="bt" style="--i:${i}">${c}</span>`).join('');
+const gb=$('#gb');for(let i=0;i<5;i++){const s=100/6,b=+(12/2**(4-i)).toFixed(2),m=`linear-gradient(to bottom,transparent ${i*s}%,#000 ${(i+1)*s}%,#000 ${Math.min(100,(i+2)*s)}%,${i===4?'#000 100%':`transparent ${Math.min(100,(i+3)*s)}%`})`;gb.insertAdjacentHTML('beforeend',`<i style="backdrop-filter:blur(${b}px);-webkit-backdrop-filter:blur(${b}px);mask-image:${m};-webkit-mask-image:${m}"></i>`)}
+if('IntersectionObserver'in window&&!reduce){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.fade').forEach((el,i)=>{el.style.setProperty('--dl',i<3?i*90+'ms':'0ms');io.observe(el)});
+const fo=new IntersectionObserver(([x])=>{formSeen=x.isIntersecting;dock()},{threshold:.25});fo.observe($('#form'))}else document.querySelectorAll('.fade').forEach(el=>el.classList.add('in'));
+if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!reduce){const st=new Map([...document.querySelectorAll('.mag')].map(m=>[m,{x:0,y:0,tx:0,ty:0}]));let raf=0;
+const loop=()=>{let act=false;for(const[m,s]of st){s.x+=(s.tx-s.x)*.2;s.y+=(s.ty-s.y)*.2;if(s.tx||s.ty||Math.abs(s.x)>.05||Math.abs(s.y)>.05){act=true;m.style.transform=`translate3d(${s.x.toFixed(2)}px,${s.y.toFixed(2)}px,0)`}else m.style.transform=''}raf=act?requestAnimationFrame(loop):0};
+addEventListener('pointermove',e=>{for(const[m,s]of st){const r=m.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),n=Math.abs(dx)<r.width/2+90&&Math.abs(dy)<r.height/2+90;s.tx=n?Math.max(-9,Math.min(9,dx*.28)):0;s.ty=n?Math.max(-9,Math.min(9,dy*.28)):0}if(!raf)raf=requestAnimationFrame(loop)},{passive:true})}
+// старт: восстановить черновик
+try{const d=JSON.parse(localStorage.getItem(LS)||'null');if(d){cart=(d.cart||[]).filter(l=>V[l.v]);for(const k in d.f||{}){const el=$('#'+k);if(el)el.type==='checkbox'?el.checked=!!d.f[k]:el.value=d.f[k]}}}catch{}
+addEventListener('s3ready',stage);opts();stage();prev();sync();requestAnimationFrame(()=>{ind();requestAnimationFrame(()=>$('#seg').classList.add('rdy'))});addEventListener('resize',ind);document.fonts&&document.fonts.ready.then(ind);
+</script><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import*as THREE from 'three';
+import{GLTFLoader}from 'three/addons/loaders/GLTFLoader.js';
+import{OrbitControls}from 'three/addons/controls/OrbitControls.js';
+import{RoomEnvironment}from 'three/addons/environments/RoomEnvironment.js';
+// 3D-сцена: модели из папки models/ (нужна страница через Live Server). Нет модели или WebGL: остаётся картинка.
+const MAP={'sofa-2':'sofa_3','sofa-3':'sofa_3','sofa-corner':'sofa_corner','mattress-single':'mattress_single','mattress-double':'mattress_double'};
+const box=document.getElementById('stage'),cv=document.getElementById('c3d'),rst=document.getElementById('rst3d'),svg=document.getElementById('svgBox'),sh=document.getElementById('sh');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let renderer=null;try{renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,powerPreference:'low-power'})}catch(e){}
+if(renderer){
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+const scene=new THREE.Scene(),pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new RoomEnvironment(),.04).texture;
+const key=new THREE.DirectionalLight(0xffffff,1.1);key.position.set(-3,5,4);scene.add(key);
+const camera=new THREE.PerspectiveCamera(32,1.2,.05,100),controls=new OrbitControls(camera,cv);
+controls.enablePan=false;controls.enableZoom=false;controls.enableDamping=true;controls.dampingFactor=.08;controls.minPolarAngle=Math.PI*.36;controls.maxPolarAngle=Math.PI*.52;cv.style.touchAction='pan-y';
+const loader=new GLTFLoader(),ready=new Map(),loading=new Map(),failed=new Set(),clock=new THREE.Clock();
+let cur=null,curKey=null,shown=null,visible=true,home=null,hopT=-1,tw=null,rs=null,lastR=0;
+const shadowTex=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(20,16,40,.55)');g.addColorStop(1,'rgba(20,16,40,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)})();
+function load(name){if(loading.has(name))return loading.get(name);
+const p=loader.loadAsync('models/'+name+'.glb').then(g=>{const root=g.scene,mixer=new THREE.AnimationMixer(root),clip=n=>g.animations.find(a=>a.name===n);
+const b=new THREE.Box3().setFromObject(root),size=b.getSize(new THREE.Vector3()),c=b.getCenter(new THREE.Vector3()),grp=new THREE.Group();grp.add(root);
+const sd=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:shadowTex,transparent:true,depthWrite:false}));sd.rotation.x=-Math.PI/2;sd.scale.set(size.x*1.5,size.z*1.5,1);sd.position.set(c.x,b.min.y+.003,c.z);grp.add(sd);
+let wave=null;if(clip('blink')&&!reduce)mixer.clipAction(clip('blink')).play();if(clip('wave')){wave=mixer.clipAction(clip('wave'));wave.setLoop(THREE.LoopOnce,1);wave.clampWhenFinished=false}
+const m={grp,mixer,wave,size,c};ready.set(name,m);return m});
+loading.set(name,p);p.catch(()=>{failed.add(name);loading.delete(name)});return p}
+function resize(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+function fit(m){const f=camera.fov*Math.PI/180,t=Math.tan(f/2),r=Math.max(m.size.y/2/t,m.size.x/2/t/camera.aspect)*1.18+m.size.z/2,d=new THREE.Vector3(.5,.26,1).normalize();
+home={pos:m.c.clone().addScaledVector(d,r),tgt:m.c.clone().add(new THREE.Vector3(0,-m.size.y*.04,0))};camera.near=r/50;camera.far=r*20;camera.updateProjectionMatrix();camera.position.copy(home.pos);controls.target.copy(home.tgt);controls.update()}
+function display(m){if(shown&&shown!==m)scene.remove(shown.grp);if(shown!==m){scene.add(m.grp);shown=m;m.grp.scale.setScalar(.94);tw={t:performance.now(),m}}
+cv.hidden=false;rst.hidden=false;svg.hidden=true;sh.textContent=curKey==='sofa-2'?'Показан диван на 3 места: вид ориентировочный':'Вращайте, чтобы рассмотреть';resize();fit(m);run()}
+function frame(){const now=performance.now();if(now-lastR<30)return;lastR=now;const dt=clock.getDelta();
+if(shown){if(!reduce)shown.mixer.update(dt);
+if(tw){const p=Math.min(1,(now-tw.t)/450);tw.m.grp.scale.setScalar(.94+.06*(1-Math.pow(1-p,4)));if(p>=1)tw=null}
+if(hopT>=0){const p=(now-hopT)/600;if(p>=1){hopT=-1;shown.grp.position.y=0}else shown.grp.position.y=Math.sin(p*Math.PI)*shown.size.y*.05}
+if(rs&&home){const p=Math.min(1,(now-rs.t)/450);camera.position.lerpVectors(rs.from,home.pos,1-Math.pow(1-p,3));if(p>=1)rs=null}}
+controls.update();renderer.render(scene,camera)}
+function run(){renderer.setAnimationLoop(shown&&visible&&!document.hidden?frame:null)}
+rst.onclick=()=>{if(shown&&home){rs={t:performance.now(),from:camera.position.clone()};controls.target.copy(home.tgt)}};
+new IntersectionObserver(([e])=>{visible=e.isIntersecting;run()}).observe(box);document.addEventListener('visibilitychange',run);new ResizeObserver(resize).observe(box);
+cv.addEventListener('webglcontextlost',e=>{e.preventDefault();Object.values(MAP).forEach(n=>failed.add(n));cv.hidden=true;rst.hidden=true;svg.hidden=false;window.dispatchEvent(new Event('s3ready'))});
+window.S3={has:k=>k in MAP&&!failed.has(MAP[k]),
+show(k){const n=MAP[k];if(!n)return false;curKey=k;cur=n;const m=ready.get(n);if(m){display(m);return true}
+load(n).then(mm=>{if(cur===n)display(mm)}).catch(()=>{if(cur===n)sh.textContent='3D-файл не найден: положите его в папку models и откройте страницу через Live Server'});return false},
+cheer(){if(!shown)return;if(shown.wave)shown.wave.reset().play();hopT=performance.now()}};
+window.dispatchEvent(new Event('s3ready'));
+setTimeout(()=>[...new Set(Object.values(MAP))].forEach((n,i)=>setTimeout(()=>load(n).catch(()=>{}),i*500)),2500);
+}
+</script>
+</body></html>
